@@ -10,5 +10,5 @@ import scrapy
 
 class ScrapyTestItem(scrapy.Item):
     # define the fields for your item here like:
-    name = scrapy.Field()
-    population = scrapy.Field()
+    # name = scrapy.Field()
+    pass
