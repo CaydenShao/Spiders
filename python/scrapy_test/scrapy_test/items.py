@@ -12,3 +12,12 @@ class ScrapyTestItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass
+
+class ImagespiderItem(scrapy.Item):
+    imgurl = scrapy.Field()
+    pass
+
+class ImagesrenameItem(scrapy.Item):
+    imgurl = scrapy.Field()
+    imgname = scrapy.Field()
+    pass

@@ -90,3 +90,11 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 1
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# 图片存储位置
+IMAGES_STORE = 'D:/ImageSpider'
+# 启动图片下载中间件
+ITEM_PIPELINES = {
+    'scrapy_test.pipelines.ImagespiderPipeline': 300,
+    'scrapy_test.pipelines.ImagesrenamePipeline': 300,
+}
