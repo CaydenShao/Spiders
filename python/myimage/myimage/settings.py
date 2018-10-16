@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-
 import random
-
-# Scrapy settings for scrapy_test project
+# Scrapy settings for myimage project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -52,13 +50,14 @@ USER_AGENT_LIST = [
 # 随机生成user agent
 USER_AGENT = random.choice(USER_AGENT_LIST)
 DOWNLOAD_TIMEOUT = 500
-BOT_NAME = 'scrapy_test'
-SPIDER_MODULES = ['scrapy_test.spiders']
-NEWSPIDER_MODULE = 'scrapy_test.spiders'
+BOT_NAME = 'myimage'
+IMAGES_STORE = 'D:\myimage'
+SPIDER_MODULES = ['myimage.spiders']
+NEWSPIDER_MODULE = 'myimage.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'scrapy_test (+http://www.yourdomain.com)'
+#USER_AGENT = 'myimage (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -69,11 +68,9 @@ CONCURRENT_REQUESTS = 80000
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
-DOWNLOAD_DELAY = 5
+DOWNLOAD_DELAY = 0
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
-CONCURRENT_REQUESTS_PER_DOMAIN = 1
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
@@ -91,13 +88,13 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 1
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'scrapy_test.middlewares.ScrapyTestSpiderMiddleware': 543,
+#    'myimage.middlewares.MyimageSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'scrapy_test.middlewares.ScrapyTestDownloaderMiddleware': 543,
+#    'myimage.middlewares.MyimageDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -108,9 +105,11 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 1
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'scrapy_test.pipelines.ScrapyTestPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'myimage.pipelines.MyimagePipeline': 300,
+}
+
+IMAGES_EXPIRES = 30
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -132,11 +131,3 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 1
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-
-# 图片存储位置
-IMAGES_STORE = 'D:/ImageSpider'
-# 启动图片下载中间件
-ITEM_PIPELINES = {
-    'scrapy_test.pipelines.ImagespiderPipeline': 300,
-    'scrapy_test.pipelines.ImagesrenamePipeline': 300,
-}
