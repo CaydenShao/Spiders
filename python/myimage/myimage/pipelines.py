@@ -10,10 +10,11 @@ from scrapy.exceptions import DropItem
 from scrapy.http import Request
 import re
 
-class MyimagePipeline(object):
+class MyimagePipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
-        for image_url in item['image_url']:
-            yield Request(image_url, meta = {'item': item['name']})
+        #for image_url in item['image_url']:
+        image_url = item['image_url']
+        yield Request(image_url, meta = {'item': item['name']})
 
     def file_path(self, request, response=None, info=None):
         name = request.meta['item']
@@ -22,15 +23,6 @@ class MyimagePipeline(object):
         image_guid = request.url.split('/')[-1]
         # name2 = request.url.split('/')[-2]
         filename = u'full/{0}/{1}'.format(name, image_guid)
+        print(filename)
         return filename
         # return 'full/%s' % (image_guid)
-
-    def process_item(self, item, spider):
-        return item
-
-    def item_completed(self, results, item, info):
-        image_path = [x['path'] for ok, x in results if ok]
-        if not image_path:
-            raise DropItem('Item contains no images')
-        item['image_paths'] = image_path
-        return item
