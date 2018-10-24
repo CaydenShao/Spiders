@@ -27,7 +27,7 @@ class NewsHotSpdierMiddleware(object):
             try:
                 print("************************************")
                 element = WebDriverWait(driver, 20).until(
-                    EC.presence_of_element_located((By.XPATH, "//div[@class='y-wrap']//div[@class='y-box container']//div[@class='y-left index-content']//div[@riot-tag='feedBox']//div[@class='feedBox']//div[@riot-tag='wcommonFeed']//div[@class='wcommonFeed']//ul//li"))
+                    EC.presence_of_element_located((By.XPATH, "//div[@class='y-wrap']//div[@class='y-box container']//div[@class='y-left index-content']//div[@riot-tag='feedBox']//div[@class='feedBox']//div[@riot-tag='wcommonFeed']//div[@class='wcommonFeed']//ul//li[@ga_event='article_item_click']"))
                 )
                 body = driver.page_source
                 return HtmlResponse(driver.current_url, body = body, encoding='utf-8', request=request)
