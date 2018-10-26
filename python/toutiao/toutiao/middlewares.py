@@ -17,7 +17,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class NewsHotSpdierMiddleware(object):
     def process_request(self, request, spider):
-        print("0000000000000000000000000000000")
         if spider.name == "NewsHot":
             dcap = dict(DesiredCapabilities.PHANTOMJS)
             dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)")
