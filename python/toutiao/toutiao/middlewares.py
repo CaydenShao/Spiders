@@ -21,10 +21,8 @@ class NewsHotSpdierMiddleware(object):
             dcap = dict(DesiredCapabilities.PHANTOMJS)
             dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)")
             driver = webdriver.Ie(desired_capabilities = dcap)
-            #time.sleep(3)
             driver.get(request.url)
             try:
-                print("************************************")
                 element = WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.XPATH, "//div[@class='y-wrap']//div[@class='y-box container']//div[@class='y-left index-content']//div[@riot-tag='feedBox']//div[@class='feedBox']//div[@riot-tag='wcommonFeed']//div[@class='wcommonFeed']//ul//li[@ga_event='article_item_click']"))
                 )

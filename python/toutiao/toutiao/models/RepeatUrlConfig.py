@@ -10,7 +10,7 @@ class RepeatUrlConfig(object):
     def __init__(self, request_url, request_times):
         self.url = request_url
         self.times = request_times
-        self.current_times = 0
+        self.current_times = 1
 
     def get_url(self):
         return self.url
@@ -33,3 +33,11 @@ class RepeatUrlConfig(object):
             return False
         else:
             return True
+
+    def to_string(self):
+        string = ''
+        if self.url == None:
+            string = string + 'url:'
+        else:
+            string = string + 'url:' + self.url
+        return string + ',times:' + str(self.times) + ',current_times:' + str(self.current_times)

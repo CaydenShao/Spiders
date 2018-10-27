@@ -6,19 +6,20 @@
 # @File    : CustomFilter.py
 # @Software: VS Code
 
-from scrapy.dupefilter import RFPDupeFilter
+from scrapy.dupefilters import RFPDupeFilter
 from models.RepeatUrlConfig import RepeatUrlConfig
+import os
 
 class CustomFilter(RFPDupeFilter):
-    def __init__(self):
-        self.configs = set([
-            RepeatUrlConfig('https://www.toutiao.com/ch/news_hot/', 20),
-            RepeatUrlConfig('https://www.toutiao.com/ch/news_tech/', 10)
-        ])
+    configs = set([
+        RepeatUrlConfig('https://www.toutiao.com/ch/news_hot/', 2),
+        RepeatUrlConfig('https://www.toutiao.com/ch/news_tech/', 1)
+    ])
 
     def get_config(self, url):
         for config in self.configs:
-            if config.get_url == url:
+            print(config.to_string())
+            if config.get_url() == url:
                 return config
         return None
 
@@ -29,6 +30,8 @@ class CustomFilter(RFPDupeFilter):
             if config.can_repeat():
                 config.request()
                 return False
+            else:
+                return True
         #------------------------------------
         fp = self.request_fingerprint(request)
         if fp in self.fingerprints:

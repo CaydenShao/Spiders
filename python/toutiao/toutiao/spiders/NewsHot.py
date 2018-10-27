@@ -15,13 +15,15 @@ from util.StringUtil import concat_str
 class NewsHotSpider(scrapy.Spider):
     name = 'NewsHot'
     allowed = ['www.toutiao.com']
-    #start_urls = ['https://www.toutiao.com/ch/news_hot/']
-    start_urls = ['https://www.toutiao.com/ch/news_tech/']
+    start_urls = [
+        'https://www.toutiao.com/ch/news_hot/', 
+        'https://www.toutiao.com/ch/news_tech/'
+        ]
+    #start_urls = ['https://www.toutiao.com/ch/news_tech/']
 
     def parse(self, response):
         elements = response.xpath("//div[@class='y-wrap']//div[@class='y-box container']//div[@class='y-left index-content']//div[@riot-tag='feedBox']//div[@class='feedBox']//div[@riot-tag='wcommonFeed']//div[@class='wcommonFeed']//ul//li[@ga_event='article_item_click']")
         e = elements[0]
-        print("---------------------------------------------------")
         for i in range(len(elements)):
             j = i + 1
             print(str(j))
@@ -48,3 +50,7 @@ class NewsHotSpider(scrapy.Spider):
             print(concat_str('评论数：', comment))
             print(concat_str('文章图片：', article_img))
             print(concat_str('文章url：', article_url))
+        if response.url == self.start_urls[0]:
+            return response.follow(self.start_urls[0], callback = self.parse)
+        else:
+            return response.follow(self.start_urls[1], callback = self.parse)
