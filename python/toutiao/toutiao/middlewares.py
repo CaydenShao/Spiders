@@ -15,9 +15,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-class NewsHotSpdierMiddleware(object):
+class NewsSpdierMiddleware(object):
     def process_request(self, request, spider):
-        if spider.name == "NewsHot":
+        if spider.name == "News":
             dcap = dict(DesiredCapabilities.PHANTOMJS)
             dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)")
             driver = webdriver.Ie(desired_capabilities = dcap)

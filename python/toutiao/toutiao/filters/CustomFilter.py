@@ -8,17 +8,12 @@
 
 from scrapy.dupefilters import RFPDupeFilter
 from models.RepeatUrlConfig import RepeatUrlConfig
+from config.RepeatUrlConfig import REPEAT_URL_CONFIG
 import os
 
 class CustomFilter(RFPDupeFilter):
-    configs = set([
-        RepeatUrlConfig('https://www.toutiao.com/ch/news_hot/', 2),
-        RepeatUrlConfig('https://www.toutiao.com/ch/news_tech/', 1)
-    ])
-
     def get_config(self, url):
-        for config in self.configs:
-            print(config.to_string())
+        for config in REPEAT_URL_CONFIG:
             if config.get_url() == url:
                 return config
         return None

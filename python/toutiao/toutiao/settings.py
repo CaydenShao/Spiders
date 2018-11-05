@@ -94,7 +94,7 @@ ROBOTSTXT_OBEY = False
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'toutiao.middlewares.NewsHotSpdierMiddleware' : 0,
+    'toutiao.middlewares.NewsSpdierMiddleware' : 0,
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware' : None, #禁止内置的中间件
 }
 
