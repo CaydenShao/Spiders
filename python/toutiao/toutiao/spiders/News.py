@@ -126,6 +126,9 @@ class NewsSpider(scrapy.Spider):
                 item['article_url'] = article_url
             else:
                 item['article_url'] = None
+            item['mark'] = None
+            item['crawl_origin'] = '今日头条'
+            item['crawl_url'] = response.url
             print(concat_str('文章标题：', title))
             print(concat_str('源媒体：', media_url))
             print(concat_str('源媒体头像：', media_avatar_img))

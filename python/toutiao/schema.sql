@@ -17,7 +17,6 @@ mark VARCHAR(120) COMMENT '标签(用空格隔开)',
 crawl_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '爬取时间',
 crawl_origin VARCHAR(120) COMMENT '爬取源（如头条）',
 crawl_url VARCHAR(512) COMMENT '爬取源url(如https://www.toutiao.com/ch/news_hot/)',
-crawl_url_md5 VARCHAR(16) UNIQUE COMMENT 'crawl_url的MD5值',
 PRIMARY KEY (news_id)
 )ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='新闻爬取项表';
 
