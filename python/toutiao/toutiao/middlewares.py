@@ -20,7 +20,7 @@ class NewsSpdierMiddleware(object):
         if spider.name == "News":
             dcap = dict(DesiredCapabilities.PHANTOMJS)
             dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)")
-            driver = webdriver.Ie(desired_capabilities = dcap)
+            driver = webdriver.PhantomJS(desired_capabilities = dcap)
             driver.get(request.url)
             try:
                 element = WebDriverWait(driver, 20).until(
@@ -30,7 +30,37 @@ class NewsSpdierMiddleware(object):
                 return HtmlResponse(driver.current_url, body = body, encoding='utf-8', request=request)
             finally:
                 driver.quit()
-            return
+            return None
+        return None
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        # This method is used by Scrapy to create your spiders.
+        s = cls()
+        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
+        return s
+
+    def process_response(self, request, response, spider):
+        # Called with the response returned from the downloader.
+
+        # Must either;
+        # - return a Response object
+        # - return a Request object
+        # - or raise IgnoreRequest
+        return response
+
+    def process_exception(self, request, exception, spider):
+        # Called when a download handler or a process_request()
+        # (from other downloader middleware) raises an exception.
+
+        # Must either:
+        # - return None: continue processing this exception
+        # - return a Response object: stops process_exception() chain
+        # - return a Request object: stops process_exception() chain
+        pass
+
+    def spider_opened(self, spider):
+        spider.logger.info('Spider opened: %s' % spider.name)
 
 
 class ToutiaoSpiderMiddleware(object):

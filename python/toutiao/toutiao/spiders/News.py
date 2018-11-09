@@ -136,8 +136,4 @@ class NewsSpider(scrapy.Spider):
             print(concat_str('评论数：', comment))
             print(concat_str('文章图片：', article_img))
             print(concat_str('文章url：', article_url))
-            response.follow(article_url, callback = self.content)
             yield item
-
-    def content(self, response):
-        print('===================================================')

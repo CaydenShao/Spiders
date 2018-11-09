@@ -22,3 +22,9 @@ class NewsItem(scrapy.Item):
     crawl_origin = scrapy.Field()
     crawl_url = scrapy.Field()
     pass
+
+class ContentItem(scrapy.Item):
+    # define the fields for your item here like:
+    article_url = scrapy.Field()
+    content = scrapy.Field()
+    pass

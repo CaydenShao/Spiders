@@ -22,8 +22,7 @@ PRIMARY KEY (news_id)
 
 CREATE TABLE news_content(
 news_content_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '新闻内容id',
-news_url VARCHAR(512) NOT NULL COMMENT '新闻源链接',
-news_url_md5 VARCHAR(16) UNIQUE COMMENT 'news_url的MD5值',
+article_url VARCHAR(512) NOT NULL COMMENT '新闻内容源链接',
 content MEDIUMBLOB NOT NULL COMMENT '新闻内容',
 PRIMARY KEY (news_content_id)
 )ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='新闻内容表';
