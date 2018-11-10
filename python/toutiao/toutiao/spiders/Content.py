@@ -8,15 +8,15 @@
 
 import scrapy
 import pymysql
-from toutiao.config.NewsDBConfig import news_db_config
+from toutiao.config.NewsDBConfig import NEWS_DB_CONFIG
 from toutiao.items import ContentItem
 
 class ContentSpider(scrapy.Spider):
     name = 'Content'
-    allowed = ['www.toutiao.com']
+    allowed = []
     start_urls = []
     # 读取需要爬取的文章内容url
-    db = pymysql.connect(**news_db_config)
+    db = pymysql.connect(**NEWS_DB_CONFIG)
     cursor = db.cursor()
     try:
         sql = "SELECT DISTINCT news.article_url FROM news WHERE news.article_url NOT IN (SELECT article_url FROM news_content);"
@@ -38,15 +38,13 @@ class ContentSpider(scrapy.Spider):
 
     def parse(self, response):
         content = response.xpath("//div[@class='y-box container']//div[@class='y-left index-middle']//div[@id='article-main']")
-        print(content)
         if content == None:
             return
         text = content.extract_first()
         if text == None:
             return
+        print(text)
         item = ContentItem()
-        item['content'] = content
-        item['article_url'] = response.url
-        print('content:')
-        print(content.extract_first())
+        item['content'] = text
+        item['article_url'] = response.meta['start_url']
         return item

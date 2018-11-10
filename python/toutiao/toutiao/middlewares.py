@@ -10,16 +10,21 @@ from scrapy.http import HtmlResponse
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys 
 import time
+import random
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from toutiao.settings import USER_AGENT_LIST
+import requests
+import json
+from toutiao.config.IPProxyPoolConfig import IPPOOL
 
 class NewsSpdierMiddleware(object):
     def process_request(self, request, spider):
         if spider.name == "News":
             dcap = dict(DesiredCapabilities.PHANTOMJS)
-            dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)")
+            dcap["phantomjs.page.settings.userAgent"] = (random.choice(USER_AGENT_LIST))
             driver = webdriver.PhantomJS(desired_capabilities = dcap)
             driver.get(request.url)
             try:
@@ -31,7 +36,9 @@ class NewsSpdierMiddleware(object):
             finally:
                 driver.quit()
             return None
-        return None
+        else:
+            request.headers['User-Agent'] = random.choice(USER_AGENT_LIST)
+
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -156,3 +163,12 @@ class ToutiaoDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+class IPProxyPoolMiddleware(object):
+    def process_request(self, request, spider):
+        #r = requests.get('http://127.0.0.1:8000/?types=0&count=5&country=国内')
+        #ip_ports = json.loads(r.text)
+        thisip = random.choice(IPPOOL)
+        print("this is ip:"+thisip["ipaddr"])
+        request.meta["proxy"] = "http://" + thisip["ipaddr"]
+        pass

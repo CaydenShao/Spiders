@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pymysql
-from toutiao.config.NewsDBConfig import news_db_config
+from toutiao.config.NewsDBConfig import NEWS_DB_CONFIG
+from toutiao.config.ContentDBConfig import CONTENT_DB_CONFIG
 from toutiao.util.EncryptionUtil import get_md5_value
 
 # Define your item pipelines here
@@ -14,16 +15,31 @@ class ToutiaoPipeline(object):
         if spider.name == 'News':
             if item['type'] == None or item['title'] == None or item['article_url'] == None or item['crawl_origin'] == None or item['crawl_url'] == None:
                 return
-            db = pymysql.connect(**news_db_config)
+            db = pymysql.connect(**NEWS_DB_CONFIG)
             cursor = db.cursor()
             try:
                 sql = "INSERT INTO news (type, title, media_url, media_avatar_img, media_name, comment_count, article_img, article_url, mark, crawl_time, crawl_origin, crawl_url) "
                 sql += "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, now(), %s, %s);"
-                # execute返回受影响的行数
                 cursor.execute(sql, (item['type'], item['title'], item['media_url'], item['media_avatar_img'], item['media_name'], item['comment_count'], item['article_img'], item['article_url'], item['mark'], item['crawl_origin'], item['crawl_url']))
-                # 当表中有自增的主键的时候，可以使用lastrowid来获取最后一次自增的ID
                 print("the last rowid is", cursor.lastrowid)
-                db.commit() # 提交数据
+                db.commit()
+            except Exception as e:
+                print(e)
+                db.rollback()
+            finally:
+                cursor.close()
+                db.close()
+        if spider.name == 'Content':
+            if item['article_url'] == None or item['content'] == None:
+                return
+            db = pymysql.connect(**CONTENT_DB_CONFIG)
+            cursor = db.cursor()
+            try:
+                sql = "INSERT INTO news_content (article_url, content, crawl_time) "
+                sql += "VALUES (%s, %s, now());"
+                cursor.execute(sql, (item['article_url'], item['content']))
+                print("the last rowid is", cursor.lastrowid)
+                db.commit()
             except Exception as e:
                 print(e)
                 db.rollback()

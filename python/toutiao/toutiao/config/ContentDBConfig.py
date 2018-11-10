@@ -1,4 +1,4 @@
-NEWS_DB_CONFIG = {
+CONTENT_DB_CONFIG = {
     "host" : "127.0.0.1", 
     "user" : "root", 
     "password" : "123456",
