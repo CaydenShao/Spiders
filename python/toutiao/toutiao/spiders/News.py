@@ -20,52 +20,7 @@ from models import RepeatUrlConfig
 class NewsSpider(scrapy.Spider):
     name = 'News'
     allowed = ['www.toutiao.com']
-    start_urls = [
-        #'https://www.toutiao.com/ch/news_hot/', # 热点
-        #'https://www.toutiao.com/ch/news_tech/', # 科技
-        #'https://www.toutiao.com/ch/internet/', # 互联网
-        #'https://www.toutiao.com/ch/software/', # 软件
-        #'https://www.toutiao.com/ch/smart_home/', # 智能家居
-        #'https://www.toutiao.com/ch/news_entertainment/', # 娱乐
-        #'https://www.toutiao.com/ch/movie/', # 电影
-        #'https://www.toutiao.com/ch/teleplay/', # 电视剧
-        #'https://www.toutiao.com/ch/shows/', # 综艺
-        #'https://www.toutiao.com/ch/gossip/', # 明星八卦
-        #'https://www.toutiao.com/ch/news_game/', # 游戏
-        #'https://www.toutiao.com/ch/news_sports/', # 体育
-        #'https://www.toutiao.com/ch/nba/', # NBA
-        #'https://www.toutiao.com/ch/cba/', # CBA
-        #'https://www.toutiao.com/ch/csl/', # 中超
-        #'https://www.toutiao.com/ch/football_italy/', # 意甲
-        #'https://www.toutiao.com/ch/news_car/', # 汽车
-        #'https://www.toutiao.com/ch/car_new_arrival/', # 新车
-        #'https://www.toutiao.com/ch/suv/', # SUV
-        #'https://www.toutiao.com/ch/car_guide/', # 汽车导购
-        #'https://www.toutiao.com/ch/car_usage/', # 用车
-        #'https://www.toutiao.com/ch/news_finance/', # 财经
-        #'https://www.toutiao.com/ch/investment/', # 投资
-        #'https://www.toutiao.com/ch/stock_channel/', # 股票
-        #'https://www.toutiao.com/ch/finance_management/', # 理财
-        #'https://www.toutiao.com/ch/macro_economic/', # 宏观经济
-        #'https://www.toutiao.com/ch/funny/', # 搞笑
-        #'https://www.toutiao.com/ch/news_military/', # 军事
-        #'https://www.toutiao.com/ch/military_china/', # 中国军情
-        #'https://www.toutiao.com/ch/weaponry/', # 武器装备
-        #'https://www.toutiao.com/ch/military_world/', # 环球军事
-        #'https://www.toutiao.com/ch/news_world/', # 国际
-        #'https://www.toutiao.com/ch/news_fashion/', # 时尚
-        #'https://www.toutiao.com/ch/fashion/', # 时装
-        #'https://www.toutiao.com/ch/body_shaping/', # 美体
-        #'https://www.toutiao.com/ch/watch/', # 腕表
-        #'https://www.toutiao.com/ch/jewelry/', # 珠宝
-        #'https://www.toutiao.com/ch/news_travel/', # 旅游
-        #'https://www.toutiao.com/ch/news_discovery/', # 探索
-        #'https://www.toutiao.com/ch/news_baby/', # 育儿
-        #'https://www.toutiao.com/ch/news_regimen/', # 养生
-        #'https://www.toutiao.com/ch/news_essay/', # 美文
-        #'https://www.toutiao.com/ch/news_history/', # 历史
-        #'https://www.toutiao.com/ch/news_food/', # 美食
-        ]
+    start_urls = []
     # 添加要爬去的url
     for config in REPEAT_URL_CONFIG:
         for i in range(config.get_times()):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for toutiao project
+# Scrapy settings for acfun project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -52,14 +52,14 @@ USER_AGENT_LIST = [
 # 随机生成user agent
 USER_AGENT = random.choice(USER_AGENT_LIST)
 DOWNLOAD_TIMEOUT = 500
-BOT_NAME = 'toutiao'
+BOT_NAME = 'acfun'
 
-SPIDER_MODULES = ['toutiao.spiders']
-NEWSPIDER_MODULE = 'toutiao.spiders'
+SPIDER_MODULES = ['acfun.spiders']
+NEWSPIDER_MODULE = 'acfun.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'toutiao (+http://www.yourdomain.com)'
+#USER_AGENT = 'acfun (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -90,16 +90,14 @@ DOWNLOAD_DELAY = 3
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'toutiao.middlewares.ToutiaoSpiderMiddleware': 543,
+#    'acfun.middlewares.AcfunSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-    'toutiao.middlewares.NewsSpdierMiddleware' : 0,
-    #'toutiao.middlewares.IPProxyPoolMiddleware' : 1,
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware' : None, #禁止内置的中间件
-}
+#DOWNLOADER_MIDDLEWARES = {
+#    'acfun.middlewares.AcfunDownloaderMiddleware': 543,
+#}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -109,9 +107,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    'toutiao.pipelines.ToutiaoPipeline': 0,
-}
+#ITEM_PIPELINES = {
+#    'acfun.pipelines.AcfunPipeline': 300,
+#}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -133,7 +131,3 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-
-DUPEFILTER_CLASS = "toutiao.filters.CustomFilter.CustomFilter"
-
-#HTTPERROR_ALLOWED_CODES = [301]

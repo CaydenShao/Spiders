@@ -25,6 +25,8 @@ class NewsItem(scrapy.Item):
 
 class ContentItem(scrapy.Item):
     # define the fields for your item here like:
+    crawl_result = scrapy.Field() # "true"：成功 "false"：失败
     article_url = scrapy.Field()
     content = scrapy.Field()
+    target_url = scrapy.Field()
     pass

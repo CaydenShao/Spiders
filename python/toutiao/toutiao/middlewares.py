@@ -19,19 +19,29 @@ from toutiao.settings import USER_AGENT_LIST
 import requests
 import json
 from toutiao.config.IPProxyPoolConfig import IPPOOL
+from toutiao.config.CookiesConfig import NEWS_SPIDER_COOKIES_CONFIG
 
 class NewsSpdierMiddleware(object):
     def process_request(self, request, spider):
         if spider.name == "News":
             dcap = dict(DesiredCapabilities.PHANTOMJS)
             dcap["phantomjs.page.settings.userAgent"] = (random.choice(USER_AGENT_LIST))
-            driver = webdriver.PhantomJS(desired_capabilities = dcap)
+            driver = webdriver.PhantomJS(desired_capabilities = dcap, service_args = ['--ignore-ssl-errors=true', '--ssl-protocol=TLSv1'])
+            global NEWS_SPIDER_COOKIES_CONFIG
+            print('*************************COOKIES****************************')
+            print(NEWS_SPIDER_COOKIES_CONFIG)
+            driver.delete_all_cookies()
+            try:
+                driver.add_cookie(NEWS_SPIDER_COOKIES_CONFIG)
+            except Exception as e:
+                print(e)
             driver.get(request.url)
             try:
                 element = WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.XPATH, "//div[@class='y-wrap']//div[@class='y-box container']//div[@class='y-left index-content']//div[@riot-tag='feedBox']//div[@class='feedBox']//div[@riot-tag='wcommonFeed']//div[@class='wcommonFeed']//ul//li[@ga_event='article_item_click']"))
                 )
                 body = driver.page_source
+                NEWS_SPIDER_COOKIES_CONFIG = driver.get_cookies()
                 return HtmlResponse(driver.current_url, body = body, encoding='utf-8', request=request)
             finally:
                 driver.quit()
