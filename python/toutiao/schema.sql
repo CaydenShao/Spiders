@@ -26,6 +26,7 @@ CREATE TABLE news_content(
 news_content_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '新闻内容id',
 article_url VARCHAR(512) NOT NULL COMMENT '新闻内容源链接',
 target_url VARCHAR(512) NOT NULL COMMENT '新闻内容目标链接（因为可能有重定向）',
+article_origin INT NOT NULL COMMENT '文章来源，如1表示今日头条',
 content LONGTEXT NOT NULL COMMENT '新闻内容',
 crawl_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '爬取时间',
 PRIMARY KEY (news_content_id)

@@ -51,9 +51,9 @@ class ToutiaoPipeline(object):
                 db = pymysql.connect(**CONTENT_DB_CONFIG)
                 cursor = db.cursor()
                 try:
-                    sql = "INSERT INTO news_content (article_url, target_url, content, crawl_time) "
-                    sql += "VALUES (%s, %s, %s, now());"
-                    cursor.execute(sql, (item['article_url'], item['target_url'], item['content']))
+                    sql = "INSERT INTO news_content (article_url, target_url, article_origin, content, crawl_time) "
+                    sql += "VALUES (%s, %s, %s, %s, now());"
+                    cursor.execute(sql, (item['article_url'], item['target_url'], item['article_origin'], item['content']))
                     print("the last rowid is", cursor.lastrowid)
                     db.commit()
                 except Exception as e:

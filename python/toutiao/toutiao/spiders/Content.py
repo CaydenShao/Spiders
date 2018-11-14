@@ -59,26 +59,42 @@ class ContentSpider(scrapy.Spider):
         return Request(url, dont_filter=True, meta={'start_url':start_url})
 
     def parse(self, response):
-        content = response.xpath("//div[@class='y-box container']//div[@class='y-left index-middle']//div[@id='article-main']")
         item = ContentItem()
+        item['crawl_result'] = "false"
+        item['content'] = None
+        item['article_url'] = response.meta['start_url']
+        item['target_url'] = response.url
+        item['article_origin'] = -1
+        content = response.xpath("//div[@class='y-box container']//div[@class='y-left index-middle']//div[@id='article-main']")
+        text = None
         if content == None:
-            print("--------------Content is None----------------")
-            item['crawl_result'] = "false"
-            item['content'] = None
-            item['article_url'] = response.meta['start_url']
-            item['target_url'] = response.url
-            return item
-        text = content.extract_first()
+            content = response.xpath("//body")
+            if content == None:
+                print("--------------Content is None----------------")
+                return item
+            else:
+                text = content.extract_first()
+                item['article_origin'] = 2
+        else:
+            text = content.extract_first()
+            if text == None:
+                content = response.xpath("//body")
+                if content == None:
+                    print("--------------Content is None----------------")
+                    return item
+                else:
+                    text = content.extract_first()
+                    item['article_origin'] = 2
+            else:
+                item['article_origin'] = 1
         if text == None:
-            print("--------------Text is None----------------")
-            item['crawl_result'] = "false"
-            item['content'] = None
-            item['article_url'] = response.meta['start_url']
-            item['target_url'] = response.url
+            print("--------------头条文章 Text is None----------------")
             return item
-        print(text)
         item['crawl_result'] = "true"
         item['content'] = text
         item['article_url'] = response.meta['start_url']
         item['target_url'] = response.url
+        print('---------------文章内容----------------')
+        print(text)
         return item
+        
