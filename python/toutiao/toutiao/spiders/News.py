@@ -9,13 +9,13 @@
 import scrapy
 import json
 import re
-from util.XPathUtil import get_select_first_str
-from util.PrintUtil import print_with_defaut
-from util.StringUtil import concat_str
-from util.NewsTypeUtil import get_news_type
+from util.xpath_util import get_select_first_str
+from util.print_util import print_with_defaut
+from util.string_util import concat_str
+from util.news_type_util import get_news_type
 from toutiao.items import NewsItem
-from config.RepeatUrlConfig import REPEAT_URL_CONFIG
-from models import RepeatUrlConfig
+from config.repeat_url_config import REPEAT_URL_CONFIG
+from models.repeat_url_config import RepeatUrlConfig
 
 class NewsSpider(scrapy.Spider):
     name = 'News'

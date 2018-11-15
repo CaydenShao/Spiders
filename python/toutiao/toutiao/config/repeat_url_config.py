@@ -1,4 +1,4 @@
-from models.RepeatUrlConfig import RepeatUrlConfig
+from models.repeat_url_config import RepeatUrlConfig
 
 REPEAT_URL_CONFIG = set([
     RepeatUrlConfig('https://www.toutiao.com/ch/news_hot/', 3),

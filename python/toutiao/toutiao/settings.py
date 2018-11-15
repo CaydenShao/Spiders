@@ -134,6 +134,6 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-DUPEFILTER_CLASS = "toutiao.filters.CustomFilter.CustomFilter"
+DUPEFILTER_CLASS = "toutiao.filters.custom_filter.CustomFilter"
 
 #HTTPERROR_ALLOWED_CODES = [301]

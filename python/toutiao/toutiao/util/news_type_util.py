@@ -1,4 +1,4 @@
-from config.NewsTypeConfig import NEWS_TYPES
+from config.news_type_config import NEWS_TYPES
 
 def get_news_type(url):
     if NEWS_TYPES.__contains__(url):

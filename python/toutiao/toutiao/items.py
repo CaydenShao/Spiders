@@ -7,7 +7,6 @@
 
 import scrapy
 
-
 class NewsItem(scrapy.Item):
     # define the fields for your item here like:
     type = scrapy.Field()

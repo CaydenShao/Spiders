@@ -8,7 +8,7 @@
 
 import scrapy
 import pymysql
-from toutiao.config.NewsDBConfig import NEWS_DB_CONFIG
+from toutiao.config.db_config import DB_CONFIG
 from toutiao.items import ContentItem
 from scrapy.http import Request
 
@@ -17,7 +17,7 @@ class ContentSpider(scrapy.Spider):
     allowed = []
     start_urls = []
     # 读取需要爬取的文章内容url
-    db = pymysql.connect(**NEWS_DB_CONFIG)
+    db = pymysql.connect(**DB_CONFIG)
     cursor = db.cursor()
     try:
         sql = "SELECT DISTINCT news.article_url FROM news WHERE news.article_url NOT IN (SELECT article_url FROM news_content);"

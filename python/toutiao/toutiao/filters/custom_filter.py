@@ -7,8 +7,8 @@
 # @Software: VS Code
 
 from scrapy.dupefilters import RFPDupeFilter
-from models.RepeatUrlConfig import RepeatUrlConfig
-from config.RepeatUrlConfig import REPEAT_URL_CONFIG
+from models.repeat_url_config import RepeatUrlConfig
+from config.repeat_url_config import REPEAT_URL_CONFIG
 import os
 
 class CustomFilter(RFPDupeFilter):

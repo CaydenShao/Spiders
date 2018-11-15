@@ -18,8 +18,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from toutiao.settings import USER_AGENT_LIST
 import requests
 import json
-from toutiao.config.IPProxyPoolConfig import IPPOOL
-from toutiao.config.CookiesConfig import NEWS_SPIDER_COOKIES_CONFIG
+from toutiao.config.ipproxypool_config import IPPOOL
+from toutiao.config.cookies_config import NEWS_SPIDER_COOKIES_CONFIG
 
 class NewsSpdierMiddleware(object):
     def process_request(self, request, spider):
