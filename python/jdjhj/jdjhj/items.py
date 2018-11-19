@@ -8,10 +8,7 @@
 import scrapy
 
 
-class AcfunItem(scrapy.Item):
+class JdjhjItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
-
-class HomePageItem(scrapy.Item):
     pass

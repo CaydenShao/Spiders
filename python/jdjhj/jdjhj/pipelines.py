@@ -6,6 +6,6 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 
-class AcfunPipeline(object):
+class JdjhjPipeline(object):
     def process_item(self, item, spider):
         return item

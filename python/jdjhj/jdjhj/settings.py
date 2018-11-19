@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for bilibili project
+# Scrapy settings for jdjhj project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -52,14 +52,14 @@ USER_AGENT_LIST = [
 # 随机生成user agent
 USER_AGENT = random.choice(USER_AGENT_LIST)
 DOWNLOAD_TIMEOUT = 500
-BOT_NAME = 'bilibili'
+BOT_NAME = 'jdjhj'
 
-SPIDER_MODULES = ['bilibili.spiders']
-NEWSPIDER_MODULE = 'bilibili.spiders'
+SPIDER_MODULES = ['jdjhj.spiders']
+NEWSPIDER_MODULE = 'jdjhj.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'bilibili (+http://www.yourdomain.com)'
+#USER_AGENT = 'jdjhj (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -70,7 +70,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 1
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -90,13 +90,13 @@ DOWNLOAD_DELAY = 3
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'bilibili.middlewares.BilibiliSpiderMiddleware': 543,
+#    'jdjhj.middlewares.JdjhjSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'bilibili.middlewares.BilibiliDownloaderMiddleware': 543,
+#    'jdjhj.middlewares.JdjhjDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -108,7 +108,7 @@ DOWNLOAD_DELAY = 3
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'bilibili.pipelines.BilibiliPipeline': 300,
+#    'jdjhj.pipelines.JdjhjPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
