@@ -26,3 +26,16 @@ class PictureItem(scrapy.Item):
     crawl_origin = scrapy.Field()
     crawl_url = scrapy.Field()
     pass
+
+class TextItem(scrapy.Item):
+    type = scrapy.Field()
+    title = scrapy.Field()
+    media_url = scrapy.Field()
+    media_avatar_img = scrapy.Field()
+    media_name = scrapy.Field()
+    thumbs_up_times = scrapy.Field()
+    text = scrapy.Field()
+    mark = scrapy.Field()
+    crawl_origin = scrapy.Field()
+    crawl_url = scrapy.Field()
+    pass

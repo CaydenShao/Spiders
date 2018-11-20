@@ -3,21 +3,21 @@
 # @Time    : 2018/11/19 晚上18:19
 # @Author  : shaokai
 # @Email   : shaokai@outlook.com
-# @File    : picture.py
+# @File    : text.py
 # @Software: VS Code
 
 import scrapy
 import json
 import re
-from xiaohuabus.items import PictureItem
+from xiaohuabus.items import TextItem
 from util.xpath_util import get_select_first_str
 from util.print_util import print_with_defaut
 from util.string_util import concat_str
 
-class PictureSpider(scrapy.Spider):
-    name = 'Picture'
+class TextSpider(scrapy.Spider):
+    name = 'Text'
     allowed = ['www.xiaohuabus.com']
-    start_urls = ['http://www.xiaohuabus.com/picNews.html']
+    start_urls = ['http://www.xiaohuabus.com/textNews.html']
     
     def parse(self, response):
         elements = response.xpath("//div[@class='th']//div[@class='main']//div[@class='main_info']")
@@ -25,7 +25,7 @@ class PictureSpider(scrapy.Spider):
             return
         e = elements[0]
         for i in range(len(elements)):
-            item = PictureItem()
+            item = TextItem()
             j = i + 1
             print(str(j))
             #item['type'] = get_news_type(response.url)
@@ -77,9 +77,8 @@ class PictureSpider(scrapy.Spider):
                     item['thumbs_up_times'] = thumbs_up_times
                 else:
                     item['thumbs_up_times'] = None
-            thumbnail = get_select_first_str(e, head + "//div[@class='main_info_bottom']//p//img/@src", None)
-            item['picture_url'] = thumbnail
-            item['thumbnail'] = thumbnail
+            text = get_select_first_str(e, head + "//div[@class='main_info_bottom']", None)
+            item['text'] = text
             item['crawl_origin'] = '笑话巴士'
             item['crawl_url'] = response.url
             print(concat_str('图片标题：', title))
@@ -88,8 +87,7 @@ class PictureSpider(scrapy.Spider):
             print(concat_str('源媒体名称：', media_name))
             print(concat_str('获赞数：', str(thumbs_up_times)))
             print(concat_str('标签：', mark))
-            print(concat_str('缩略图：', thumbnail))
-            print(concat_str('图片：', thumbnail))
+            print(concat_str('文本内容：', text))
             yield item
         next_url = get_select_first_str(response, "//div[@class='th']//div[@class='main']//div[@class='pager']//a[@class='page' and text()='下一页']/@href", None)
         if next_url is not None:
