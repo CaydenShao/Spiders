@@ -22,13 +22,13 @@ class PictureSpider(scrapy.Spider):
     def parse(self, response):
         elements = response.xpath("//div[@class='th']//div[@class='main']//div[@class='main_info']")
         if len(elements) <= 0:
-            return
+            return None
         e = elements[0]
         for i in range(len(elements)):
             item = PictureItem()
             j = i + 1
             print(str(j))
-            #item['type'] = get_news_type(response.url)
+            item['type'] = '1'
             head = "//div[@class='th']//div[@class='main']//div[@class='main_info' and position()=" + str(j) + "]"
             title = get_select_first_str(e, head + "//div[@class='main_info_top']//div[@id='main_info_top_right']//div[@class='head_title_2']//span//a//h1/text()", None)
             if title != None:
@@ -94,4 +94,4 @@ class PictureSpider(scrapy.Spider):
         next_url = get_select_first_str(response, "//div[@class='th']//div[@class='main']//div[@class='pager']//a[@class='page' and text()='下一页']/@href", None)
         if next_url is not None:
             next_url = "http:" + next_url
-            yield response.follow(next_url, callback = self.parse) 
+            yield scrapy.Request(next_url, callback = self.parse)

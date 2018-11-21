@@ -93,3 +93,23 @@ CREATE TABLE video
     crawl_url VARCHAR(512) COMMENT '爬取源url(如https://www.toutiao.com/ch/news_hot/)',
     PRIMARY KEY (video_id)
 )ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='视频项';
+
+-- 短文、小品文系列文本表
+CREATE TABLE essay
+(
+    essay_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '短文id',
+    type VARCHAR(120) NOT NULL COMMENT '短文类型',
+    title VARCHAR(120) COMMENT '视频标题、描述',
+    media_url VARCHAR(512) COMMENT '源媒体（创建者的主页）',
+    media_avatar_img VARCHAR(512) COMMENT '源媒体头像',
+    media_name VARCHAR(120) COMMENT '原媒体名称',
+    comment_count BIGINT COMMENT '评论数量',
+    thumbs_up_times BIGINT COMMENT '点赞、喜欢或推荐等次数',
+    img_url VARCHAR(512) COMMENT '图片',
+    mark VARCHAR(120) COMMENT '标签(用,隔开)',
+    crawl_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '爬取时间',
+    crawl_origin VARCHAR(120) COMMENT '爬取源（如头条）',
+    crawl_url VARCHAR(512) COMMENT '爬取url(如https://www.toutiao.com/ch/news_hot/)',
+    crawl_url_md5 VARCHAR(64) UNIQUE COMMENT '爬取url MD5值',
+    PRIMARY KEY (essay_id)
+)ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='短文、小品项';

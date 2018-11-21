@@ -6,12 +6,37 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-
+from scrapy.http import HtmlResponse
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys 
+import time
+import random
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from xiaohuabus.settings import USER_AGENT_LIST
+import requests
+import json
 
 class XiaohuabusSpiderMiddleware(object):
-    # Not all methods need to be defined. If a method is not defined,
-    # scrapy acts as if the spider middleware does not modify the
-    # passed objects.
+    def process_request(self, request, spider):
+        if spider.name == "Picture" or spider.name == "Joke":
+            dcap = dict(DesiredCapabilities.PHANTOMJS)
+            dcap["phantomjs.page.settings.userAgent"] = (random.choice(USER_AGENT_LIST))
+            driver = webdriver.PhantomJS(desired_capabilities = dcap, service_args = ['--ignore-ssl-errors=true', '--ssl-protocol=TLSv1'])
+            try:
+                driver.get(request.url)
+                #element = WebDriverWait(driver, 20).until(
+                #    EC.presence_of_element_located((By.XPATH, "//div[@class='th']//div[@class='main']//div[@class='main_info']"))
+                #)
+                body = driver.page_source
+                return HtmlResponse(driver.current_url, body = body, encoding='utf-8', request=request)
+            finally:
+                driver.quit()
+            return None
+        else:
+            request.headers['User-Agent'] = random.choice(USER_AGENT_LIST)
 
     @classmethod
     def from_crawler(cls, crawler):

@@ -94,9 +94,10 @@ DOWNLOAD_DELAY = 1
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'xiaohuabus.middlewares.XiaohuabusDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'xiaohuabus.middlewares.XiaohuabusSpiderMiddleware': 0,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware' : None, #禁止内置的中间件
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -106,9 +107,9 @@ DOWNLOAD_DELAY = 1
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'xiaohuabus.pipelines.XiaohuabusPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'xiaohuabus.pipelines.XiaohuabusPipeline': 0,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html

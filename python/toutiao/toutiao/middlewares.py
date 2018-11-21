@@ -49,7 +49,6 @@ class NewsSpdierMiddleware(object):
         else:
             request.headers['User-Agent'] = random.choice(USER_AGENT_LIST)
 
-
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
