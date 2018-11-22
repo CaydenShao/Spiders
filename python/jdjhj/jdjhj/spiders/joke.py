@@ -9,96 +9,107 @@
 import scrapy
 import json
 import re
-from xiaohuabus.items import JokeItem
+from scrapy.http import Request
+from jdjhj.items import JokeItem
+from jdjhj.util.source_type_util import get_joke_type
+from jdjhj.util.source_type_util import get_joke_page_url_head
 from util.xpath_util import get_select_first_str
 from util.print_util import print_with_defaut
 from util.string_util import concat_str
 
-class TextSpider(scrapy.Spider):
+class JokeSpider(scrapy.Spider):
     name = 'Joke'
-    allowed = ['www.xiaohuabus.com']
-    start_urls = ['http://www.xiaohuabus.com/duanzi/index.html']
+    allowed = ['www.jdjhj.com']
+    start_urls = [
+        "http://www.jdjhj.com/wz/yuanchuangxiaohua/index.html",
+        "http://www.jdjhj.com/wz/qtxh/index.html",
+        "http://www.jdjhj.com/wz/lxh/index.html",
+        "http://www.jdjhj.com/wz/zcxh/index.html",
+        "http://www.jdjhj.com/wz/tyxh/index.html",
+        "http://www.jdjhj.com/wz/jdxh/index.html",
+        "http://www.jdjhj.com/wz/xyxh/index.html",
+        "http://www.jdjhj.com/wz/gdxh/index.html",
+        "http://www.jdjhj.com/wz/kbxh/index.html",
+        "http://www.jdjhj.com/wz/xxxh/index.html",
+        "http://www.jdjhj.com/wz/crxh/index.html",
+    ]
+
+    def start_requests(self):
+        cls = self.__class__
+        #if method_is_overridden(cls, Spider, 'make_requests_from_url'):
+        #    warnings.warn(
+        #        "Spider.make_requests_from_url method is deprecated; it "
+        #        "won't be called in future Scrapy releases. Please "
+        #        "override Spider.start_requests method instead (see %s.%s)." % (
+        #            cls.__module__, cls.__name__
+        #        ),
+        #    )
+        for url in self.start_urls:
+            start_url = url
+            yield self.make_requests_from_url(url, start_url)
+        #else:
+        #    for url in self.start_urls:
+        #        yield Request(url, dont_filter=True, meta={'start_url':start_url})
+
+    def make_requests_from_url(self, url, start_url):
+        """ This method is deprecated. """
+        return Request(url, dont_filter=True, meta = {'type':None, 'page_url_head':None})
     
     def parse(self, response):
-        elements = response.xpath("//div[@class='mBox']//div[@class='bd']//ul[@class='clearfix wenList']//li")
-        if len(elements) <= 0:
+        type = 0
+        if response.request.meta['type'] is None:
+            type = get_joke_type(response.url)
+        else:
+            type = response.request.meta['type']
+        page_url_head = None
+        if response.request.meta['page_url_head'] is None:
+            page_url_head = get_joke_page_url_head(response.url)
+        else:
+            page_url_head = response.request.meta['page_url_head']
+        if page_url_head == None:
             print('============================')
             print(response.text)
+            return
+        elements = response.xpath("//*[@id='main']/div/div[1]/div[2]/ul/li")
+        if len(elements) <= 0:
             return
         e = elements[0]
         for i in range(len(elements)):
             j = i + 1
             print(str(j))
-            head = "//div[@class='mBox']//div[@class='bd']//ul[@class='clearfix wenList']//li[position()=" + str(j) + "]"
-            href = get_select_first_str(e, head + "//a[position()=1]//@href", None)
+            head = "//*[@id='main']/div/div[1]/div[2]/ul/li[position()=" + str(j) + "]"
+            href = get_select_first_str(e, head + "/div/h2/a/@href", None)
+            title = get_select_first_str(e, head + "/div/h2/a/text()", None)
             if href is not None:
-                content_url = "http:" + href
-                yield response.follow(content_url, callback = self.content)
-        next_url = get_select_first_str(response, "//div[@class='mBox']//div[@class='bd']//div[@class='pager']//a[@class='page' and text()='下一页']/@href", None)
+                content_url = "http://www.jdjhj.com" + href
+                yield response.follow(content_url, callback = self.content, meta = {'type':type, 'title':title})
+        next_url = get_select_first_str(response, "//*[@id='pager']/ul/li/a[text()='下一页']/@href", None)
         if next_url is not None:
-            next_url = "http:" + next_url
-            yield response.follow(next_url, callback = self.parse)
+            next_url = page_url_head + "/" + next_url
+            print('###########################')
+            print(next_url)
+            yield scrapy.Request(next_url, callback = self.parse, meta = {'type':type, 'page_url_head':page_url_head})
 
     def content(self, response):
         item = JokeItem()
-        item['type'] = '1'
-        head = "//div[@class='th']//div[@class='t2']//div[@class='main']//div[@class='news_info']"
-        title = get_select_first_str(response, head + "//div[@class='main_info_top']//div[@id='main_info_top_right']//div[@class='head_title_2']//span//a/@title", None)
+        title = response.request.meta['title']
         if title != None:
             item['title'] = title.strip()
         else:
             item['title'] = None
-        mark = None
-        index = 1
-        while True:
-            r = get_select_first_str(response, head + "//div[@class='main_info_top']//div[@id='main_info_top_right']//div[@class='publish_info']//span//a[position()=" + str(index) + "]/text()", None)
-            if r == None:
-                break
-            index = index + 1
-            if mark == None:
-                mark = r
-            else:
-                mark = mark + ',' + r
-        item['mark'] = mark
-        media_url = get_select_first_str(response, head + "//div[@class='main_info_top']//div[@class='main_info_top_left']//div[@id='head_photo']//a/@href", None)
-        if media_url != None:
-            media_url = 'http://www.xiaohuabus.com' + media_url
-            item['media_url'] = media_url
+        joke_type = title = response.request.meta['type']
+        if joke_type != None:
+            item['type'] = joke_type
         else:
-            item['media_url'] = None
-        media_avatar_img = get_select_first_str(response, head + "//div[@class='main_info_top']//div[@class='main_info_top_left']//div[@id='head_photo']//a//img/@src", None)
-        if media_avatar_img != None:
-            media_avatar_img = 'http://www.xiaohuabus.com' + media_avatar_img
-            item['media_avatar_img'] = media_avatar_img
-        else:
-            item['media_avatar_img'] = None
-        media_name = get_select_first_str(response, head + "//div[@class='main_info_top']//div[@id='main_info_top_right']//div[@id='head_title']//div[@class='user_info']//span[@id='yonghuming']//a/text()", None)
-        if media_name != None:
-            media_name = media_name.replace('\xa0', '')
-            media_name = media_name.replace('⋅', '')
-        item['media_name'] = media_name
-        thumbs_up = get_select_first_str(response, head + "//div[@class='feix']//div[@class='feix_right']//a[position()=1]//span[position()=2]/text()", None)
-        thumbs_up_times = None
-        if thumbs_up == None:
-            item['thumbs_up_times'] = None
-        else:
-            r = re.findall('[1-9]\d*', thumbs_up)
-            if r != None and r.__len__() > 0:
-                thumbs_up_times = int(r[0])
-                if '万' in thumbs_up:
-                    thumbs_up_times = thumbs_up_times * 10000
-                item['thumbs_up_times'] = thumbs_up_times
-            else:
-                item['thumbs_up_times'] = None
-        text = get_select_first_str(response, head + "//div[@class='main_info_bottom']", None)
+            item['type'] = None
+        text = get_select_first_str(response, "//*[@id='main']/div/div[1]/div[2]/div[1]/p/span/span", None)
+        if text == None:
+            text = get_select_first_str(response, "//*[@id='main']/div/div[1]/div[2]/div[1]/p", None)
+        if text == None:
+            print('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-')
         item['text'] = text
-        item['crawl_origin'] = '笑话巴士'
+        item['crawl_origin'] = '天天搞笑网'
         item['crawl_url'] = response.url
-        print(concat_str('图片标题：', title))
-        print(concat_str('源媒体：', media_url))
-        print(concat_str('源媒体头像：', media_avatar_img))
-        print(concat_str('源媒体名称：', media_name))
-        print(concat_str('获赞数：', str(thumbs_up_times)))
-        print(concat_str('标签：', mark))
+        print(concat_str('笑话标题：', title))
         print(concat_str('内容', text))
         return item
