@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for xiaohuabus project
+# Scrapy settings for wxcha project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -52,14 +52,14 @@ USER_AGENT_LIST = [
 # 随机生成user agent
 USER_AGENT = random.choice(USER_AGENT_LIST)
 DOWNLOAD_TIMEOUT = 500
-BOT_NAME = 'xiaohuabus'
+BOT_NAME = 'wxcha'
 
-SPIDER_MODULES = ['xiaohuabus.spiders']
-NEWSPIDER_MODULE = 'xiaohuabus.spiders'
+SPIDER_MODULES = ['wxcha.spiders']
+NEWSPIDER_MODULE = 'wxcha.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'xiaohuabus (+http://www.yourdomain.com)'
+#USER_AGENT = 'wxcha (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -90,15 +90,15 @@ DOWNLOAD_DELAY = 1
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'xiaohuabus.middlewares.XiaohuabusSpiderMiddleware': 543,
+#    'wxcha.middlewares.WxchaSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-    'xiaohuabus.middlewares.XiaohuabusSpiderMiddleware': 0,
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware' : None, #禁止内置的中间件
-}
+#DOWNLOADER_MIDDLEWARES = {
+#    'wxcha.middlewares.WxchaSpiderMiddleware': 0,
+#    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware' : None, #禁止内置的中间件
+#}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -108,9 +108,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    'xiaohuabus.pipelines.XiaohuabusPipeline': 0,
-}
+#ITEM_PIPELINES = {
+#    'wxcha.pipelines.WxchaPipeline': 300,
+#}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
