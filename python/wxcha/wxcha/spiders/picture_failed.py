@@ -9,36 +9,41 @@
 import scrapy
 import json
 import re
+import pymysql
 from scrapy.http import Request
 from wxcha.items import PictureItem
 from wxcha.util.source_type_util import get_source_type
 from util.xpath_util import get_select_first_str
 from util.print_util import print_with_defaut
 from util.string_util import concat_str
+from wxcha.config.db_config import DB_CONFIG
 
-class PictureSpider(scrapy.Spider):
-    name = 'Picture'
+class PictureFailedSpider(scrapy.Spider):
+    name = 'PictureFailed'
     allowed = ['www.wxcha.com']
-    start_urls = [
-        'http://www.wxcha.com/touxiang/nvsheng/',
-        #'http://www.wxcha.com/touxiang/nansheng/',
-        #'http://www.wxcha.com/touxiang/qinglv/',
-        #'http://www.wxcha.com/touxiang/gexing/',
-        #'http://www.wxcha.com/touxiang/katong/',
-        #'http://www.wxcha.com/touxiang/mingxing/',
-        #'http://www.wxcha.com/touxiang/feizhuliu/',
-        #'http://www.wxcha.com/touxiang/gaoxiao/',
-        #'http://www.wxcha.com/touxiang/wenzi/',
-        #'http://www.wxcha.com/biaoqing/gaoxiao/',
-        #'http://www.wxcha.com/biaoqing/dongman/',
-        #'http://www.wxcha.com/biaoqing/wenzi/',
-        #'http://www.wxcha.com/biaoqing/zhufu/',
-        #'http://www.wxcha.com/biaoqing/dongtai/',
-        #'http://www.wxcha.com/biaoqing/feizhuliu/',
-        #'http://www.wxcha.com/biaoqing/liaotian/',
-        #'http://www.wxcha.com/biaoqing/keai/',
-        #'http://www.wxcha.com/biaoqing/tieba/',
-    ]
+    start_urls = []
+    type_mappings = {}
+    # 读取需要爬取的图片分组url
+    db = pymysql.connect(**DB_CONFIG)
+    cursor = db.cursor()
+    try:
+        sql = "SELECT DISTINCT group_url, type FROM picture_crawl_failed;"
+        cursor.execute(sql)
+        datas = cursor.fetchall()
+        count = 0
+        for data in datas:
+            if data[0] != None:
+                count += 1
+                print(str(count) + ':' + data[0])
+                start_urls.append(data[0])
+                type_mappings[data[0]] = data[1]
+        db.commit() # 提交数据
+    except Exception as e:
+        print(e)
+        db.rollback()
+    finally:
+        cursor.close()
+        db.close()
 
     def start_requests(self):
         cls = self.__class__
@@ -59,33 +64,14 @@ class PictureSpider(scrapy.Spider):
 
     def make_requests_from_url(self, url, start_url):
         """ This method is deprecated. """
-        return Request(url, dont_filter=True, meta = {'type':None, 'stage':'page'})
+        picture_urls = []
+        has_error = 'false'
+        type = None
+        if self.type_mappings.__contains__(start_url):
+            type = self.type_mappings[start_url]
+        return Request(url, dont_filter=True, meta = {'type':type, 'group_url':start_url, 'stage':'content', 'picture_urls':picture_urls, 'has_error':has_error})
     
     def parse(self, response):
-        type = 0
-        if response.request.meta['type'] is None:
-            type = get_source_type(response.url)
-        else:
-            type = response.request.meta['type']
-        elements = response.xpath("/html/body/div[5]/div[1]/ul/li")
-        if len(elements) <= 0:
-            return
-        e = elements[0]
-        for i in range(len(elements)):
-            j = i + 1
-            print(str(j))
-            head = "/html/body/div[5]/div[1]/ul/li[position()=" + str(j) + "]"
-            href = get_select_first_str(e, head + "//a[position()=1]//@href", None)
-            if href is not None:
-                content_url = href
-                picture_urls = []
-                has_error = 'false'
-                yield response.follow(content_url, callback = self.content, meta = {'type':type, 'group_url':content_url, 'stage':'content', 'picture_urls':picture_urls, 'has_error':has_error})
-        next_url = get_select_first_str(response, "/html/body/div[5]/div[1]/div/a[text()='下一页']/@href", None)
-        if next_url is not None:
-            yield response.follow(next_url, callback = self.parse, meta = {'type':type, 'stage':'page'})
-
-    def content(self, response):
         type = 0
         if response.request.meta['type'] is None:
             type = get_source_type(response.url)
@@ -137,7 +123,7 @@ class PictureSpider(scrapy.Spider):
             picture_urls.append(src)
         next_url = get_select_first_str(response, "/html/body/div[5]/div[1]/div[5]/div/a[text()='下一页']/@href", None)
         if next_url is not None:
-            yield response.follow(next_url, callback = self.content, meta = {'type':type, 'group_url':group_url, 'stage':'content', 'picture_urls':picture_urls, 'has_error':has_error})
+            yield response.follow(next_url, callback = self.parse, meta = {'type':type, 'group_url':group_url, 'stage':'content', 'picture_urls':picture_urls, 'has_error':has_error})
         else:
             item = PictureItem()
             item['type'] = type

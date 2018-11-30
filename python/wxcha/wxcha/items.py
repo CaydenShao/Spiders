@@ -14,13 +14,13 @@ class WxchaItem(scrapy.Item):
     pass
 
 class PictureItem(scrapy.Item):
-    result = scrapy.Field()
     type = scrapy.Field()
     title = scrapy.Field()
     mark = scrapy.Field()
     thumbs_up_times = scrapy.Field()
-    picture_url = scrapy.Field()
+    picture_urls = scrapy.Field()
     crawl_origin = scrapy.Field()
     crawl_url = scrapy.Field()
     group_url = scrapy.Field()
+    has_error = scrapy.Field()
     pass
