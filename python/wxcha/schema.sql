@@ -25,7 +25,7 @@ CREATE TABLE picture
     picture_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '图片id',
     picture_group_id BIGINT NOT NULL COMMENT '图片分组id，对应picture_group表的picture_group_id',
     picture_url VARCHAR(512) COMMENT '图片链接',
-    picture_url_md5 VARCHAR(64) UNIQUE COMMENT '图片链接MD5值',
+    picture_url_md5 VARCHAR(64) COMMENT '图片链接MD5值',
     PRIMARY KEY (picture_id)
 )ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='图片项表';
 
