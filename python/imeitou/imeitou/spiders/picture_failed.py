@@ -9,23 +9,41 @@
 import scrapy
 import json
 import re
+import pymysql
 from scrapy.http import Request
 from imeitou.items import PictureItem
 from imeitou.util.source_type_util import get_source_type
 from util.xpath_util import get_select_first_str
 from util.print_util import print_with_defaut
 from util.string_util import concat_str
-from util.source_type_util import get_picture_page_url_head
-from util.source_type_util import get_source_type
+from imeitou.config.db_config import DB_CONFIG
 
-class PictureSpider(scrapy.Spider):
-    name = 'Picture'
-    allowed = ['www.imeitou.com']
-    start_urls = [
-        #'http://www.imeitou.com/nvsheng/',
-        'http://www.imeitou.com/nansheng/',
-        'http://www.imeitou.com/qinglv/',
-    ]
+class PictureFailedSpider(scrapy.Spider):
+    name = 'PictureFailed'
+    allowed = ['www.wxcha.com']
+    start_urls = []
+    type_mappings = {}
+    # 读取需要爬取的图片分组url
+    db = pymysql.connect(**DB_CONFIG)
+    cursor = db.cursor()
+    try:
+        sql = "SELECT DISTINCT group_url, type FROM picture_crawl_failed;"
+        cursor.execute(sql)
+        datas = cursor.fetchall()
+        count = 0
+        for data in datas:
+            if data[0] != None:
+                count += 1
+                print(str(count) + ':' + data[0])
+                start_urls.append(data[0])
+                type_mappings[data[0]] = data[1]
+        db.commit() # 提交数据
+    except Exception as e:
+        print(e)
+        db.rollback()
+    finally:
+        cursor.close()
+        db.close()
 
     def start_requests(self):
         cls = self.__class__
@@ -46,40 +64,14 @@ class PictureSpider(scrapy.Spider):
 
     def make_requests_from_url(self, url, start_url):
         """ This method is deprecated. """
-        return Request(url, dont_filter=True, meta = {'type':None, 'page_url_head':None, 'stage':'page'})
+        picture_urls = []
+        has_error = 'false'
+        type = None
+        if self.type_mappings.__contains__(start_url):
+            type = self.type_mappings[start_url]
+        return Request(url, dont_filter=True, meta = {'type':type, 'group_url':start_url, 'stage':'content', 'picture_urls':picture_urls, 'has_error':has_error})
     
     def parse(self, response):
-        type = 0
-        if response.request.meta['type'] is None:
-            type = get_source_type(response.url)
-        else:
-            type = response.request.meta['type']
-        page_url_head = None
-        if response.request.meta['page_url_head'] is None:
-            page_url_head = get_picture_page_url_head(response.url)
-        else:
-            page_url_head = response.request.meta['page_url_head']
-        elements = response.xpath("/html/body/div[3]/div[3]/div[1]/div[1]/ul/li")
-        if len(elements) <= 0:
-            return
-        e = elements[0]
-        for i in range(len(elements)):
-            j = i + 1
-            print(str(j))
-            head = "/html/body/div[3]/div[3]/div[1]/div[1]/ul/li[position()=" + str(j) + "]"
-            href = get_select_first_str(e, head + "/a/@href", None)
-            if href is not None:
-                href = "http://www.imeitou.com" + href
-                content_url = href
-                picture_urls = []
-                has_error = 'false'
-                yield response.follow(content_url, callback = self.content, meta = {'type':type, 'group_url':content_url, 'stage':'content', 'picture_urls':picture_urls, 'has_error':has_error})
-        next_url = get_select_first_str(response, "/html/body/div[3]/div[3]/div[1]/div[1]/div[2]/div/a[text()='下一页']/@href", None)
-        if next_url is not None:
-            next_url = page_url_head + next_url
-            yield response.follow(next_url, callback = self.parse, meta = {'type':type, 'page_url_head':page_url_head, 'stage':'page'})
-
-    def content(self, response):
         type = 0
         if response.request.meta['type'] is None:
             type = get_source_type(response.url)
@@ -107,11 +99,11 @@ class PictureSpider(scrapy.Spider):
             else:
                 divs = response.xpath("//*[@id='content']/ul/center//div")
                 for d in range(len(divs)):
-                    images = response.xpath("//*[@id='content']/ul/center//div//img")
+                    images = response.xpath("//*[@id='content']/ul/center//div[position()=" + str(d) + "]//img")
                     for i in range(len(images)):
                         j = i + 1
                         print(str(j))
-                        head = "//*[@id='content']/ul/center//div[position()=" + d + "]//img[position()=" + str(j) + "]"
+                        head = "//*[@id='content']/ul/center//div[position()=" + str(d) + "]//img[position()=" + str(j) + "]"
                         src = get_select_first_str(response, head + "/@src", None)
                         picture_urls.append(src)
         else:

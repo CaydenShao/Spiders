@@ -16,6 +16,8 @@ class ImeitouItem(scrapy.Item):
 class PictureItem(scrapy.Item):
     type = scrapy.Field()
     title = scrapy.Field()
+    mark = scrapy.Field()
+    thumbs_up_times = scrapy.Field()
     picture_urls = scrapy.Field()
     crawl_origin = scrapy.Field()
     crawl_url = scrapy.Field()

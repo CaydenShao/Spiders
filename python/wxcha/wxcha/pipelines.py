@@ -37,7 +37,6 @@ class WxchaPipeline(object):
                     sql = "DELETE FROM picture_crawl_failed WHERE group_url_md5 = %s;"
                     group_url_md5 = get_md5_value(bytes(item['group_url'], encoding = "utf8"))
                     cursor.execute(sql, (group_url_md5))
-                    db.commit()
                     sql = "INSERT INTO picture_group (type, title, thumbs_up_times, mark, group_url, group_url_md5, crawl_time, crawl_origin, crawl_url) "
                     sql += "VALUES (%s, %s, %s, %s, %s, %s, now(), %s, %s);"
                     cursor.execute(sql, (item['type'], item['title'], item['thumbs_up_times'], item['mark'], item['group_url'], group_url_md5, item['crawl_origin'], item['crawl_url']))
