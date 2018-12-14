@@ -18,7 +18,7 @@ class PictureItem(scrapy.Item):
     title = scrapy.Field()
     mark = scrapy.Field()
     thumbs_up_times = scrapy.Field()
-    picture_urls = scrapy.Field()
+    pictures = scrapy.Field()
     crawl_origin = scrapy.Field()
     crawl_url = scrapy.Field()
     group_url = scrapy.Field()

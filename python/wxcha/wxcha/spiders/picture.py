@@ -135,26 +135,22 @@ class PictureSpider(scrapy.Spider):
             head = "//*[@id='txtabbox']/div[2]/ul/li[position()=" + str(j) + "]"
             src = get_select_first_str(response, head + "//a//img/@data-original", None)
             picture_urls.append(src)
-        next_url = get_select_first_str(response, "/html/body/div[5]/div[1]/div[5]/div/a[text()='下一页']/@href", None)
-        if next_url is not None:
-            yield response.follow(next_url, callback = self.content, meta = {'type':type, 'group_url':group_url, 'stage':'content', 'picture_urls':picture_urls, 'has_error':has_error})
-        else:
-            item = PictureItem()
-            item['type'] = type
-            item['title'] = title
-            item['mark'] = mark
-            item['thumbs_up_times'] = thumbs_up_times
-            item['crawl_origin'] = '微茶'
-            item['crawl_url'] = response.url
-            item['group_url'] = group_url
-            item['picture_urls'] = picture_urls
-            item['has_error'] = has_error
-            print(concat_str('图片类型：', type))
-            print(concat_str('图片标题：', title))
-            print(concat_str('图片标签：', mark))
-            print(concat_str('点赞数量：', str(thumbs_up_times)))
-            print(concat_str('group_url：', group_url))
-            print('picture_urls：')
-            print('has_error:', has_error)
-            print(picture_urls)
-            yield item
+        item = PictureItem()
+        item['type'] = type
+        item['title'] = title
+        item['mark'] = mark
+        item['thumbs_up_times'] = thumbs_up_times
+        item['crawl_origin'] = '微茶'
+        item['crawl_url'] = response.url
+        item['group_url'] = group_url
+        item['picture_urls'] = picture_urls
+        item['has_error'] = has_error
+        print(concat_str('图片类型：', type))
+        print(concat_str('图片标题：', title))
+        print(concat_str('图片标签：', mark))
+        print(concat_str('点赞数量：', str(thumbs_up_times)))
+        print(concat_str('group_url：', group_url))
+        print('picture_urls：')
+        print('has_error:', has_error)
+        print(picture_urls)
+        yield item
