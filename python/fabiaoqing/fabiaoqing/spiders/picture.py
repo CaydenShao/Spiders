@@ -24,20 +24,20 @@ class PictureSpider(scrapy.Spider):
     allowed = ['www.fabiaoqing.com']
     start_urls = [
         'https://www.fabiaoqing.com/bqb/lists/type/liaomei.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/qunliao.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/doutu.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/mingxing.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/zhuangbi.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/wu.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/toupai.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/fuli.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/erciyuan.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/meng.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/katong.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/yingshi.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/duiren.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/wenzi.html',
-        #'https://www.fabiaoqing.com/bqb/lists/type/emoji.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/qunliao.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/doutu.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/mingxing.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/zhuangbi.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/wu.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/toupai.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/fuli.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/erciyuan.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/meng.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/katong.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/yingshi.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/duiren.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/wenzi.html',
+        'https://www.fabiaoqing.com/bqb/lists/type/emoji.html',
     ]
 
     def start_requests(self):
@@ -113,16 +113,16 @@ class PictureSpider(scrapy.Spider):
         title = get_select_first_str(response, "//*[@id='bqb']/div[1]/h1/text()", None)
         if title != None:
             title = title.strip()
-        images = response.xpath("//*[@id='bqb']/div[1]/div[1]/div/div/div/a")
+        images = response.xpath("//*[@id='bqb']//div[1]//div[1]//div//div//div[@class='bqppdiv1']")
         print(response.text)
         if images == None or len(images) == 0:
             has_error = 'true'
         for i in range(len(images)):
             j = i + 1
             print(str(j))
-            head = "//*[@id='bqb']/div[1]/div[1]/div/div/div/a[position()=" + str(j) + "]"
-            src = get_select_first_str(response, head + "/div/img/@data-original", None)
-            description = get_select_first_str(response, head + "/div/img/@title", None)
+            head = "//*[@id='bqb']//div[1]//div[1]//div//div//div[position()=" + str(j) + "]"
+            src = get_select_first_str(response, head + "//img//@data-original", None)
+            description = get_select_first_str(response, head + "//img//@title", None)
             picture = {}
             print('====================================')
             print(src)
@@ -134,7 +134,7 @@ class PictureSpider(scrapy.Spider):
         item['title'] = title
         item['mark'] = None
         item['thumbs_up_times'] = None
-        item['crawl_origin'] = '美头网'
+        item['crawl_origin'] = '发表情'
         item['crawl_url'] = response.url
         item['group_url'] = group_url
         item['pictures'] = pictures
