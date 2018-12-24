@@ -129,12 +129,13 @@ class PictureSpider(scrapy.Spider):
         images = response.xpath("//*[@id='txtabbox']/div[2]/ul/li")
         if images == None or len(images) == 0:
             has_error = 'true'
-        for i in range(len(images)):
-            j = i + 1
-            print(str(j))
-            head = "//*[@id='txtabbox']/div[2]/ul/li[position()=" + str(j) + "]"
-            src = get_select_first_str(response, head + "//a//img/@data-original", None)
-            picture_urls.append(src)
+        else:
+            for i in range(len(images)):
+                j = i + 1
+                print(str(j))
+                head = "//*[@id='txtabbox']/div[2]/ul/li[position()=" + str(j) + "]"
+                src = get_select_first_str(response, head + "//a//img/@data-original", None)
+                picture_urls.append(src)
         item = PictureItem()
         item['type'] = type
         item['title'] = title

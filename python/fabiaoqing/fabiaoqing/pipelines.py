@@ -14,7 +14,7 @@ class FabiaoqingPipeline(object):
         if spider.name == "Picture" or spider.name == "PictureFailed":
             if item['group_url'] == None:
                 return item
-            if item['title'] == None or len(item['picture_urls']) == 0 or item['has_error'] == 'true':
+            if item['title'] == None or len(item['pictures']) == 0 or item['has_error'] == 'true':
                 db = pymysql.connect(**DB_CONFIG)
                 cursor = db.cursor()
                 try:
@@ -42,11 +42,11 @@ class FabiaoqingPipeline(object):
                     cursor.execute(sql, (item['type'], item['title'], item['thumbs_up_times'], item['mark'], item['group_url'], group_url_md5, item['crawl_origin'], item['crawl_url']))
                     picture_group_id = cursor.lastrowid
                     print("the last rowid is", picture_group_id)
-                    picture_urls = item['picture_urls']
-                    for p in picture_urls:
-                        sql = "INSERT INTO picture (picture_group_id, picture_url, picture_url_md5) "
-                        sql += "VALUES (%s, %s, %s);"
-                        cursor.execute(sql, (picture_group_id, p, get_md5_value(bytes(p, encoding = "utf8"))))
+                    pictures = item['pictures']
+                    for p in pictures:
+                        sql = "INSERT INTO picture (picture_group_id, description, picture_url, picture_url_md5) "
+                        sql += "VALUES (%s, %s, %s, %s);"
+                        cursor.execute(sql, (picture_group_id, p['description'], p['url'], get_md5_value(bytes(p['url'], encoding = "utf8"))))
                         print("the last rowid is", cursor.lastrowid)
                     db.commit()
                 except Exception as e:
