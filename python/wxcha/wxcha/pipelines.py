@@ -18,10 +18,19 @@ class WxchaPipeline(object):
                 db = pymysql.connect(**DB_CONFIG)
                 cursor = db.cursor()
                 try:
-                    sql = "INSERT INTO picture_crawl_failed (group_url, group_url_md5, type) "
+                    sql = "INSERT INTO picture_crawl_failed "
+                    sql += "("
+                    sql += "group_url, "
+                    sql += "group_url_md5, "
+                    sql += "type"
+                    sql += ") "
                     sql += "VALUES (%s, %s, %s);"
                     group_url_md5 = get_md5_value(bytes(item['group_url'], encoding = "utf8"))
-                    cursor.execute(sql, (item['group_url'], group_url_md5, item['type']))
+                    cursor.execute(sql, (
+                        item['group_url'], 
+                        group_url_md5, 
+                        item['type']
+                        ))
                     print("the last rowid is", cursor.lastrowid)
                     db.commit()
                 except Exception as e:
@@ -37,16 +46,45 @@ class WxchaPipeline(object):
                     sql = "DELETE FROM picture_crawl_failed WHERE group_url_md5 = %s;"
                     group_url_md5 = get_md5_value(bytes(item['group_url'], encoding = "utf8"))
                     cursor.execute(sql, (group_url_md5))
-                    sql = "INSERT INTO picture_group (type, title, thumbs_up_times, mark, group_url, group_url_md5, crawl_time, crawl_origin, crawl_url) "
+                    sql = "INSERT INTO picture_group "
+                    sql += "("
+                    sql += "type, "
+                    sql += "title, "
+                    sql += "thumbs_up_times, "
+                    sql += "mark, "
+                    sql += "group_url, "
+                    sql += "group_url_md5, "
+                    sql += "crawl_time, "
+                    sql += "crawl_origin, "
+                    sql += "crawl_url"
+                    sql += ") "
                     sql += "VALUES (%s, %s, %s, %s, %s, %s, now(), %s, %s);"
-                    cursor.execute(sql, (item['type'], item['title'], item['thumbs_up_times'], item['mark'], item['group_url'], group_url_md5, item['crawl_origin'], item['crawl_url']))
+                    cursor.execute(sql, (
+                        item['type'], 
+                        item['title'], 
+                        item['thumbs_up_times'], 
+                        item['mark'], 
+                        item['group_url'], 
+                        group_url_md5, 
+                        item['crawl_origin'], 
+                        item['crawl_url']
+                        ))
                     picture_group_id = cursor.lastrowid
                     print("the last rowid is", picture_group_id)
                     picture_urls = item['picture_urls']
                     for p in picture_urls:
-                        sql = "INSERT INTO picture (picture_group_id, picture_url, picture_url_md5) "
+                        sql = "INSERT INTO picture "
+                        sql += "("
+                        sql += "picture_group_id, "
+                        sql += "picture_url, "
+                        sql += "picture_url_md5"
+                        sql += ") "
                         sql += "VALUES (%s, %s, %s);"
-                        cursor.execute(sql, (picture_group_id, p, get_md5_value(bytes(p, encoding = "utf8"))))
+                        cursor.execute(sql, (
+                            picture_group_id, 
+                            p, 
+                            get_md5_value(bytes(p, encoding = "utf8"))
+                            ))
                         print("the last rowid is", cursor.lastrowid)
                     db.commit()
                 except Exception as e:

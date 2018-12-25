@@ -59,7 +59,11 @@ class PictureSpider(scrapy.Spider):
 
     def make_requests_from_url(self, url, start_url):
         """ This method is deprecated. """
-        return Request(url, dont_filter=True, meta = {'type':None, 'page_url_head':'https://www.fabiaoqing.com', 'stage':'page'})
+        return Request(url, dont_filter=True, meta = {
+            'type':None, 
+            'page_url_head':'https://www.fabiaoqing.com', 
+            'stage':'page'
+            })
     
     def parse(self, response):
         type = 0
@@ -87,11 +91,21 @@ class PictureSpider(scrapy.Spider):
                 content_url = href
                 pictures = []
                 has_error = 'false'
-                yield response.follow(content_url, callback = self.content, meta = {'type':type, 'group_url':content_url, 'stage':'content', 'pictures':pictures, 'has_error':has_error})
+                yield response.follow(content_url, callback = self.content, meta = {
+                    'type':type, 
+                    'group_url':content_url, 
+                    'stage':'content', 
+                    'pictures':pictures, 
+                    'has_error':has_error
+                    })
         next_url = get_select_first_str(response, "//*[@id='bqblist']/div[@class='ui pagination menu']/a[contains(text(), '下一页')]/@href", None)
         if next_url is not None:
             next_url = page_url_head + next_url
-            yield response.follow(next_url, callback = self.parse, meta = {'type':type, 'page_url_head':page_url_head, 'stage':'page'})
+            yield response.follow(next_url, callback = self.parse, meta = {
+                'type':type, 
+                'page_url_head':page_url_head, 
+                'stage':'page'
+                })
 
     def content(self, response):
         type = 0

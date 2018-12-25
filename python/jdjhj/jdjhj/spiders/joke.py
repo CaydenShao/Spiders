@@ -21,17 +21,17 @@ class JokeSpider(scrapy.Spider):
     name = 'Joke'
     allowed = ['www.jdjhj.com']
     start_urls = [
-        #"http://www.jdjhj.com/wz/yuanchuangxiaohua/index.html",
+        "http://www.jdjhj.com/wz/yuanchuangxiaohua/index.html",
         "http://www.jdjhj.com/wz/qtxh/index.html",
-        #"http://www.jdjhj.com/wz/lxh/index.html",
-        #"http://www.jdjhj.com/wz/zcxh/index.html",
-        #"http://www.jdjhj.com/wz/tyxh/index.html",
-        #"http://www.jdjhj.com/wz/jdxh/index.html",
-        #"http://www.jdjhj.com/wz/xyxh/index.html",
-        #"http://www.jdjhj.com/wz/gdxh/index.html",
-        #"http://www.jdjhj.com/wz/kbxh/index.html",
-        #"http://www.jdjhj.com/wz/xxxh/index.html",
-        #"http://www.jdjhj.com/wz/crxh/index.html",
+        "http://www.jdjhj.com/wz/lxh/index.html",
+        "http://www.jdjhj.com/wz/zcxh/index.html",
+        "http://www.jdjhj.com/wz/tyxh/index.html",
+        "http://www.jdjhj.com/wz/jdxh/index.html",
+        "http://www.jdjhj.com/wz/xyxh/index.html",
+        "http://www.jdjhj.com/wz/gdxh/index.html",
+        "http://www.jdjhj.com/wz/kbxh/index.html",
+        "http://www.jdjhj.com/wz/xxxh/index.html",
+        "http://www.jdjhj.com/wz/crxh/index.html",
     ]
 
     def start_requests(self):
@@ -67,7 +67,6 @@ class JokeSpider(scrapy.Spider):
         else:
             page_url_head = response.request.meta['page_url_head']
         if page_url_head == None:
-            print('============================')
             print(response.text)
             return
         elements = response.xpath("//*[@id='main']/div/div[1]/div[2]/ul/li")
@@ -86,7 +85,6 @@ class JokeSpider(scrapy.Spider):
         next_url = get_select_first_str(response, "//*[@id='pager']/ul/li/a[text()='下一页']/@href", None)
         if next_url is not None:
             next_url = page_url_head + "/" + next_url
-            print('###########################')
             print(next_url)
             yield scrapy.Request(next_url, callback = self.parse, meta = {'type':type, 'page_url_head':page_url_head})
 
@@ -105,8 +103,6 @@ class JokeSpider(scrapy.Spider):
         text = get_select_first_str(response, "//*[@id='main']/div/div[1]/div[2]/div[1]/p/span/span", None)
         if text == None:
             text = get_select_first_str(response, "//*[@id='main']/div/div[1]/div[2]/div[1]/p", None)
-        if text == None:
-            print('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-')
         item['text'] = text
         item['crawl_origin'] = '天天搞笑网'
         item['crawl_url'] = response.url

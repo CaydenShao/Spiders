@@ -8,14 +8,54 @@ def persistence_insert(news, content):
         cursor = db.cursor()
         result = True
         try:
-            sql = "INSERT INTO news (type, title, media_url, media_avatar_img, media_name, comment_count, article_img, article_url, article_url_md5, mark, crawl_time, crawl_origin, crawl_url) "
+            sql = "INSERT INTO news "
+            sql += "("
+            sql += "type, "
+            sql += "title, "
+            sql += "media_url, "
+            sql += "media_avatar_img, "
+            sql += "media_name, "
+            sql += "comment_count, "
+            sql += "article_img, "
+            sql += "article_url, "
+            sql += "article_url_md5, "
+            sql += "mark, "
+            sql += "crawl_time, "
+            sql += "crawl_origin, "
+            sql += "crawl_url"
+            sql += ") "
             sql += "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), %s, %s);"
-            cursor.execute(sql, (news['type'], news['title'], news['media_url'], news['media_avatar_img'], news['media_name'], news['comment_count'], news['article_img'], news['article_url'], news['article_url_md5'], news['mark'], news['crawl_origin'], news['crawl_url']))
+            cursor.execute(sql, (
+                news['type'], 
+                news['title'], 
+                news['media_url'], 
+                news['media_avatar_img'], 
+                news['media_name'], 
+                news['comment_count'], 
+                news['article_img'], 
+                news['article_url'], 
+                news['article_url_md5'], 
+                news['mark'], 
+                news['crawl_origin'], 
+                news['crawl_url']
+                ))
             print("the last rowid is", cursor.lastrowid)
             news['news_id'] = cursor.lastrowid
-            sql = "INSERT INTO news_content (news_id, target_url, article_origin, content, crawl_time) "
+            sql = "INSERT INTO news_content "
+            sql += "("
+            sql += "news_id, "
+            sql += "target_url, "
+            sql += "article_origin, "
+            sql += "content, "
+            sql += "crawl_time"
+            sql += ") "
             sql += "VALUES (%s, %s, %s, %s, now());"
-            cursor.execute(sql, (news['news_id'], content['target_url'], content['article_origin'], content['content']))
+            cursor.execute(sql, (
+                news['news_id'], 
+                content['target_url'], 
+                content['article_origin'], 
+                content['content']
+                ))
             print("the last rowid is", cursor.lastrowid)
             db.commit()
         except Exception as e:
@@ -39,7 +79,22 @@ if __name__ == "__main__":
         news_data = {}
         content_data = {}
         try:
-            sql = "SELECT news_id, type, title, media_url, media_avatar_img, media_name, comment_count, article_img, article_url, article_url_md5, mark, crawl_time, crawl_origin, crawl_url FROM news "
+            sql = "SELECT "
+            sql += "news_id, "
+            sql += "type, "
+            sql += "title, "
+            sql += "media_url, "
+            sql += "media_avatar_img, "
+            sql += "media_name, "
+            sql += "comment_count, "
+            sql += "article_img, "
+            sql += "article_url, "
+            sql += "article_url_md5, "
+            sql += "mark, "
+            sql += "crawl_time, "
+            sql += "crawl_origin, "
+            sql += "crawl_url "
+            sql += "FROM news "
             sql += "ORDER BY news_id limit " + str(index) + ",1;"
             cursor.execute(sql)
             datas = cursor.fetchall()
@@ -64,7 +119,14 @@ if __name__ == "__main__":
                     news_data['crawl_url'] = data[13]
                 else:
                     break
-            sql = "SELECT news_content_id, article_url, target_url, article_origin, content, crawl_time FROM news_content "
+            sql = "SELECT "
+            sql += "news_content_id, "
+            sql += "article_url, "
+            sql += "target_url, "
+            sql += "article_origin, "
+            sql += "content, "
+            sql += "crawl_time "
+            sql += "FROM news_content "
             sql += "WHERE article_url = %s;"
             cursor.execute(sql, (news_data['article_url']))
             datas = cursor.fetchall()

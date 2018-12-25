@@ -59,7 +59,7 @@ def persistence_insert(group, pictures):
                     sql += "VALUES (%s, %s, %s, %s);"
                     cursor.execute(sql, (
                         picture_group_id, 
-                        p['description'], 
+                        None, 
                         p['picture_url'], 
                         p['picture_url_md5']
                         ))
@@ -121,7 +121,6 @@ if __name__ == "__main__":
             sql = "SELECT "
             sql += "picture_id, "
             sql += "picture_group_id, "
-            sql += "description, "
             sql += "picture_url, "
             sql += "picture_url_md5 "
             sql += "FROM picture "
@@ -133,9 +132,8 @@ if __name__ == "__main__":
                     picture_data = {}
                     picture_data['picture_id'] = data[0]
                     picture_data['picture_group_id'] = data[1]
-                    picture_data['description'] = data[2]
-                    picture_data['picture_url'] = data[3]
-                    picture_data['picture_url_md5'] = data[4]
+                    picture_data['picture_url'] = data[2]
+                    picture_data['picture_url_md5'] = data[3]
                     pictures_data.append(picture_data)
             if persistence_insert(group_data, pictures_data):
                 print("=======Insert success!========")

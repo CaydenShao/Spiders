@@ -102,6 +102,7 @@ CREATE TABLE essay
     essay_id BIGINT NOT NULL AUTO_INCREMENT COMMENT '短文id',
     type VARCHAR(120) NOT NULL COMMENT '短文类型',
     title VARCHAR(120) COMMENT '视频标题、描述',
+    text LONGTEXT NOT NULL COMMENT '短文内容',
     media_url VARCHAR(512) COMMENT '源媒体（创建者的主页）',
     media_avatar_img VARCHAR(512) COMMENT '源媒体头像',
     media_name VARCHAR(120) COMMENT '原媒体名称',

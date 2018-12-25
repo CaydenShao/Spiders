@@ -22,7 +22,7 @@ class PictureSpider(scrapy.Spider):
     name = 'Picture'
     allowed = ['www.imeitou.com']
     start_urls = [
-        #'http://www.imeitou.com/nvsheng/',
+        'http://www.imeitou.com/nvsheng/',
         'http://www.imeitou.com/nansheng/',
         'http://www.imeitou.com/qinglv/',
     ]

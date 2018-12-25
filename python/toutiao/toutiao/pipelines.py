@@ -17,9 +17,37 @@ class ToutiaoPipeline(object):
             db = pymysql.connect(**DB_CONFIG)
             cursor = db.cursor()
             try:
-                sql = "INSERT INTO news (type, title, media_url, media_avatar_img, media_name, comment_count, article_img, article_url, article_url_md5, mark, crawl_time, crawl_origin, crawl_url) "
+                sql = "INSERT INTO news "
+                sql += "("
+                sql += "type, "
+                sql += "title, "
+                sql += "media_url, "
+                sql += "media_avatar_img, "
+                sql += "media_name, "
+                sql += "comment_count, "
+                sql += "article_img, "
+                sql += "article_url, "
+                sql += "article_url_md5, "
+                sql += "mark, "
+                sql += "crawl_time, "
+                sql += "crawl_origin, "
+                sql += "crawl_url"
+                sql += ") "
                 sql += "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), %s, %s);"
-                cursor.execute(sql, (item['type'], item['title'], item['media_url'], item['media_avatar_img'], item['media_name'], item['comment_count'], item['article_img'], item['article_url'], get_md5_value(bytes(item['article_url'], encoding = "utf8")), item['mark'], item['crawl_origin'], item['crawl_url']))
+                cursor.execute(sql, (
+                    item['type'], 
+                    item['title'], 
+                    item['media_url'], 
+                    item['media_avatar_img'], 
+                    item['media_name'], 
+                    item['comment_count'], 
+                    item['article_img'], 
+                    item['article_url'], 
+                    get_md5_value(bytes(item['article_url'], encoding = "utf8")), 
+                    item['mark'], 
+                    item['crawl_origin'], 
+                    item['crawl_url']
+                    ))
                 print("the last rowid is", cursor.lastrowid)
                 db.commit()
             except Exception as e:
@@ -50,9 +78,21 @@ class ToutiaoPipeline(object):
                 db = pymysql.connect(**DB_CONFIG)
                 cursor = db.cursor()
                 try:
-                    sql = "INSERT INTO news_content (article_url, target_url, article_origin, content, crawl_time) "
+                    sql = "INSERT INTO news_content "
+                    sql += "("
+                    sql += "article_url, "
+                    sql += "target_url, "
+                    sql += "article_origin, "
+                    sql += "content, "
+                    sql += "crawl_time"
+                    sql += ") "
                     sql += "VALUES (%s, %s, %s, %s, now());"
-                    cursor.execute(sql, (item['article_url'], item['target_url'], item['article_origin'], item['content']))
+                    cursor.execute(sql, (
+                        item['article_url'], 
+                        item['target_url'], 
+                        item['article_origin'], 
+                        item['content']
+                        ))
                     print("the last rowid is", cursor.lastrowid)
                     db.commit()
                 except Exception as e:

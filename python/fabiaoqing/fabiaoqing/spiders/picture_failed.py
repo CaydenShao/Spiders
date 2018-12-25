@@ -69,7 +69,13 @@ class PictureFailedSpider(scrapy.Spider):
         type = None
         if self.type_mappings.__contains__(start_url):
             type = self.type_mappings[start_url]
-        return Request(url, dont_filter=True, meta = {'type':type, 'group_url':start_url, 'stage':'content', 'pictures':pictures, 'has_error':has_error})
+        return Request(url, dont_filter=True, meta = {
+            'type':type, 
+            'group_url':start_url, 
+            'stage':'content', 
+            'pictures':pictures, 
+            'has_error':has_error
+            })
     
     def parse(self, response):
         type = 0

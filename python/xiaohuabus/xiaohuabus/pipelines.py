@@ -17,9 +17,37 @@ class XiaohuabusPipeline(object):
             db = pymysql.connect(**DB_CONFIG)
             cursor = db.cursor()
             try:
-                sql = "INSERT INTO picture (type, title, media_url, media_avatar_img, media_name, thumbs_up_times, thumbnail, picture_url, picture_url_md5, mark, crawl_time, crawl_origin, crawl_url) "
+                sql = "INSERT INTO picture "
+                sql += "("
+                sql += "type, "
+                sql += "title, "
+                sql += "media_url, "
+                sql += "media_avatar_img, "
+                sql += "media_name, "
+                sql += "thumbs_up_times, "
+                sql += "thumbnail, "
+                sql += "picture_url, "
+                sql += "picture_url_md5, "
+                sql += "mark, "
+                sql += "crawl_time, "
+                sql += "crawl_origin, "
+                sql += "crawl_url"
+                sql += ") "
                 sql += "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), %s, %s);"
-                cursor.execute(sql, (item['type'], item['title'], item['media_url'], item['media_avatar_img'], item['media_name'], item['thumbs_up_times'], item['thumbnail'], item['picture_url'], get_md5_value(bytes(item['picture_url'], encoding = "utf8")), item['mark'], item['crawl_origin'], item['crawl_url']))
+                cursor.execute(sql, (
+                    item['type'], 
+                    item['title'], 
+                    item['media_url'], 
+                    item['media_avatar_img'], 
+                    item['media_name'], 
+                    item['thumbs_up_times'], 
+                    item['thumbnail'], 
+                    item['picture_url'], 
+                    get_md5_value(bytes(item['picture_url'], encoding = "utf8")), 
+                    item['mark'], 
+                    item['crawl_origin'], 
+                    item['crawl_url']
+                    ))
                 print("the last rowid is", cursor.lastrowid)
                 db.commit()
             except Exception as e:
@@ -34,9 +62,35 @@ class XiaohuabusPipeline(object):
             db = pymysql.connect(**DB_CONFIG)
             cursor = db.cursor()
             try:
-                sql = "INSERT INTO joke (type, title, media_url, media_avatar_img, media_name, thumbs_up_times, content, mark, crawl_time, crawl_origin, crawl_url, crawl_url_md5) "
+                sql = "INSERT INTO joke "
+                sql += "("
+                sql += "type, "
+                sql += "title, "
+                sql += "media_url, "
+                sql += "media_avatar_img, "
+                sql += "media_name, "
+                sql += "thumbs_up_times, "
+                sql += "content, "
+                sql += "mark, "
+                sql += "crawl_time, "
+                sql += "crawl_origin, "
+                sql += "crawl_url, "
+                sql += "crawl_url_md5"
+                sql += ") "
                 sql += "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, now(), %s, %s, %s);"
-                cursor.execute(sql, (item['type'], item['title'], item['media_url'], item['media_avatar_img'], item['media_name'], item['thumbs_up_times'], item['text'], item['mark'], item['crawl_origin'], item['crawl_url'], get_md5_value(bytes(item['crawl_url'], encoding = "utf8"))))
+                cursor.execute(sql, (
+                    item['type'], 
+                    item['title'], 
+                    item['media_url'], 
+                    item['media_avatar_img'], 
+                    item['media_name'], 
+                    item['thumbs_up_times'], 
+                    item['text'], 
+                    item['mark'], 
+                    item['crawl_origin'], 
+                    item['crawl_url'], 
+                    get_md5_value(bytes(item['crawl_url'], encoding = "utf8"))
+                    ))
                 print("the last rowid is", cursor.lastrowid)
                 db.commit()
             except Exception as e:
