@@ -105,17 +105,7 @@ class PictureSpider(scrapy.Spider):
         title = get_select_first_str(response, "/html/body/div[5]/div[1]/div[1]/h1/text()", None)
         if title != None:
             title = title.strip()
-        mark = None
-        index = 1
-        while True:
-            r = get_select_first_str(response, "/html/body/div[5]/div[1]/div[6]/p/a[position()=" + str(index) + "]/text()", None)
-            if r == None:
-                break
-            index = index + 1
-            if mark == None:
-                mark = r
-            else:
-                mark = mark + ',' + r
+        mark = self.parse_mark(response)
         thumbs_up = get_select_first_str(response, "/html/body/div[5]/div[1]/div[4]/a[1]/i/text()", None)
         thumbs_up_times = None
         if thumbs_up == None:
@@ -128,7 +118,16 @@ class PictureSpider(scrapy.Spider):
                     thumbs_up_times = thumbs_up_times * 10000
         images = response.xpath("//*[@id='txtabbox']/div[2]/ul/li")
         if images == None or len(images) == 0:
-            has_error = 'true'
+            images = response.xpath("/html/body/div[5]/div[1]/ul/li")
+            if images == None or len(images) == 0:
+                has_error = 'true'
+            else:
+                for i in range(len(images)):
+                    j = i + 1
+                    print(str(j))
+                    head = "/html/body/div[5]/div[1]/ul/li[position()=" + str(j) + "]"
+                    src = get_select_first_str(response, head + "/img/@data-original", None)
+                    picture_urls.append(src)
         else:
             for i in range(len(images)):
                 j = i + 1
@@ -155,3 +154,32 @@ class PictureSpider(scrapy.Spider):
         print('has_error:', has_error)
         print(picture_urls)
         yield item
+    
+    def parse_mark(self, response):
+        mark = None
+        index = 1
+        result = get_select_first_str(response, "/html/body/div[5]/div[1]/div[6]/p/a[position()='1']/text()", None)
+        if result != None:
+            while True:
+                r = get_select_first_str(response, "/html/body/div[5]/div[1]/div[6]/p/a[position()=" + str(index) + "]/text()", None)
+                if r == None:
+                    break
+                index = index + 1
+                if mark == None:
+                    mark = r
+                else:
+                    mark = mark + ',' + r
+        else:
+            result = get_select_first_str(response, "/html/body/div[5]/div[1]/div[5]/p/a[position()='1']/text()", None)
+            index = 1
+            if result != None:
+                while True:
+                    r = get_select_first_str(response, "/html/body/div[5]/div[1]/div[5]/p/a[position()=" + str(index) + "]/text()", None)
+                    if r == None:
+                        break
+                    index = index + 1
+                    if mark == None:
+                        mark = r
+                    else:
+                        mark = mark + ',' + r
+        return mark
